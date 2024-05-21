@@ -1,0 +1,51 @@
+"convoyer" := TRUE; //q53.1
+//emiter q53.0
+IF "height" > 0 THEN
+    IF "height" > 200 THEN
+        "wysokosc0" := TRUE;
+    ELSE
+        "wysokosc0" := FALSE;
+    END_IF;
+END_IF;
+
+IF "bar0" AND NOT ("sensor mid 1") THEN //i54.0
+    "wysokosc1" := "wysokosc0";
+END_IF;
+
+IF "bar1" AND NOT ("sensor mid 2") THEN //i54.1
+    IF NOT ("sensor mid 1") AND NOT ("sensor mid 2") //i54.0 i i i54.1
+    THEN
+        "dlugosc0" := TRUE; 
+    ELSE
+        "dlugosc0" := FALSE;
+    END_IF;
+    "wysokosc2" := "wysokosc1";
+END_IF;
+
+IF NOT ("bar1") AND "sensor mid 2" THEN //i54.1
+    "dlugosc1" := "dlugosc0";
+    "wysokosc3" := "wysokosc2";
+END_IF;
+
+IF "bar2" AND NOT ("sensor end") THEN //i54.2
+    "wysokosc4" := "wysokosc3";
+    "dlugosc2" := "dlugosc1";
+END_IF;
+
+IF "dlugosc2" AND NOT ("wysokosc4") THEN
+    "convoyer+" := TRUE; //q53.6
+    "convoyer left" := FALSE; //q54.0
+    "convoyer right" := TRUE; //q54.1
+ELSIF NOT ("dlugosc2") AND NOT ("wysokosc4") THEN
+    "convoyer+" := TRUE;
+    "convoyer left" := TRUE;
+    "convoyer right" := TRUE;
+ELSE
+    "convoyer+" := TRUE;
+    "convoyer left" := TRUE;
+    "convoyer right" := FALSE;
+END_IF;
+
+"bar0" := "sensor mid 1"; //i54.0
+"bar1" := "sensor mid 2";
+"bar2" := "sensor end";
